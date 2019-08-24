@@ -8,13 +8,16 @@ import com.digitalsolutionsbydon.devdesk.repositories.RoleRepository;
 import com.digitalsolutionsbydon.devdesk.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 @Service(value = "userService")
 public class UserServiceImpl implements UserService
 {
@@ -55,6 +58,8 @@ public class UserServiceImpl implements UserService
         }
     }
 
+    @Transactional
+    @Modifying
     @Override
     public User save(User user)
     {
@@ -73,6 +78,8 @@ public class UserServiceImpl implements UserService
         return userRepo.save(newUser);
     }
 
+    @Transactional
+    @Modifying
     @Override
     public User update(User user, long id)
     {
@@ -124,10 +131,13 @@ public class UserServiceImpl implements UserService
         }
     }
 
+    @Transactional
+    @Modifying
     @Override
     public void deleteUserById(long id)
     {
-        if (userRepo.findById(id).isPresent())
+        if (userRepo.findById(id)
+                    .isPresent())
         {
             userRepo.deleteById(id);
         } else
